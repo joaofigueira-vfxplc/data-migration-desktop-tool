@@ -28,15 +28,12 @@ namespace Cosmos.DataTransfer.AzureTableAPIExtension.Data
                     var partitionKey = item.GetValue(key)?.ToString();
                     entity.PartitionKey = partitionKey;
                 }
-                else if (key.Equals(rowKeyFieldNameToUse, StringComparison.InvariantCultureIgnoreCase))
+                if (key.Equals(rowKeyFieldNameToUse, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var rowKey = item.GetValue(key)?.ToString();
                     entity.RowKey = rowKey;
                 }
-                else
-                {
-                    entity.Add(key, item.GetValue(key));
-                }
+                entity.Add(key, item.GetValue(key));
             }
 
             return entity;
