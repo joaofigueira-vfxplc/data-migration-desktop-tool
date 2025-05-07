@@ -23,17 +23,22 @@ namespace Cosmos.DataTransfer.AzureTableAPIExtension.Data
 
             foreach (var key in item.GetFieldNames())
             {
+                var value = item.GetValue(key);
+                if(value is IEnumerable<object> enumerable)
+                {
+                    value = string.Join(",", enumerable);
+                }
                 if (key.Equals(partitionKeyFieldNameToUse, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var partitionKey = item.GetValue(key)?.ToString();
+                    var partitionKey = value?.ToString();
                     entity.PartitionKey = partitionKey;
                 }
                 if (key.Equals(rowKeyFieldNameToUse, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var rowKey = item.GetValue(key)?.ToString();
+                    var rowKey = value?.ToString();
                     entity.RowKey = rowKey;
                 }
-                entity.Add(key, item.GetValue(key));
+                entity.Add(key, value);
             }
 
             return entity;
